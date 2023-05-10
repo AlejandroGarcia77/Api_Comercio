@@ -1,0 +1,85 @@
+GET http://localhost:3000/api/usuarios/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNvbWVyY2lvc1BlcGVAZ21haWwuY29tIiwicm9sIjoiY29tZXJjaW8iLCJpYXQiOjE2ODM1NTc1MzMsImV4cCI6MTcxNTA5MzUzM30.T6ryevzT0N2UF0RWFUBhJO7h8kCjab9Vd9i-GDBV3N8
+
+###
+
+POST http://localhost:3000/api/usuarios HTTP/1.1
+Content-Type: application/json
+
+{
+    "email":"admin@gmail.com",
+    "nombre":"admin",
+    "contrasenia":"DEmh%6Uv17tFn8E6",
+    "edad":20,
+    "ciudad":"Madrid",
+    "intereses":["Deporte","Comida"],
+    "permiteRecibirOfertas":"true"
+}
+
+###
+
+POST http://localhost:3000/api/usuarios HTTP/1.1
+Content-Type: application/json
+
+{
+    "email":"alexAdmin@gmail.com",
+    "nombre":"admin",
+    "contrasenia":"DEmh%6Uv17tFn8E6",
+    "edad":20,
+    "ciudad":"Madrid",
+    "intereses":["Deporte","Comida"],
+    "permiteRecibirOfertas":"true"
+}
+
+###
+
+POST http://localhost:3000/api/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "email":"alex@gmail.com",
+    "contrasenia":"DEmh%6Uv17tFn8E6"
+}
+
+###
+
+POST http://localhost:3000/api/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "email":"alexAdmin@gmail.com",
+    "contrasenia":"DEmh%6Uv17tFn8E6"
+}
+
+###
+
+POST http://localhost:3000/api/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+    "email":"admin@gmail.com",
+    "contrasenia":"DEmh%6Uv17tFn8E6"
+}
+
+###
+
+PUT http://localhost:3000/api/usuarios HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFsZXhAZ21haWwuY29tIiwiaWF0IjoxNjgzNTMwODUyLCJleHAiOjE3MTUwNjY4NTJ9._HsCHHB4FbbEBPN3PYgcSAIMxqXs5Xbli-X8uZUukdQ
+
+{
+    "ciudad":"Barcelona",
+    "permiteRecibirOfertas":true,
+    "contrasenia":"Be321M2%"
+}
+
+
+
+
+
+###
+
+DELETE  http://localhost:3000/api/usuarios/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFsZXgzQGdtYWlsLmNvbSIsImlhdCI6MTY4MzU0NTIyOSwiZXhwIjoxNzE1MDgxMjI5fQ.81TDCBmhmT5nwhEUo_r3-fYTtLOz2MM-UQXTVNmt-1o
+

@@ -1,0 +1,713 @@
+openapi: 3.0.0
+info:
+  title: Merchant API
+  version: '1.0'
+  description: |-
+    Nuestra API de gestión de comercios permite a los desarrolladores integrar fácilmente la gestión de inventario, pedidos y clientes en sus aplicaciones. 
+    
+    Con nuestra API, los comerciantes pueden dar de alta sus comercios y usuarios, y los usuarios pueden visitar los comercios y dejar sus valoraciones. 
+    Además, los comercios pueden ver información sobre los clientes que visiten sus páginas. 
+    
+    _Esto permite a los comerciantes automatizar sus procesos y mejorar la eficiencia de su negocio._ 
+  contact:
+    email: alejandro.gallego@live.u-tad.com
+  license:
+    name: U-tad
+    url: https://u-tad.com/
+servers:
+    - url: http://localhost:3000/api/
+tags:
+  - name: Usuarios
+    description: Toda la información relativa a los usuarios
+  - name: Comercios
+    description: Toda la información relativa a los comerciantes
+  - name: Paginas
+    description: Toda las operaciones sobre paginas que se pueden realizar
+components:
+  securitySchemes:
+    bearerAuth:
+        type: http
+        scheme: bearer
+        bearerFormat: JWT  
+  schemas:
+    Paginas:
+      type: object
+      properties:
+        email_propietario:
+          type: string
+        titulo:
+          type: string
+          uniqueItems: true
+        ciudad:
+          type: string
+        actividad:
+          type: string
+        resumen:
+          type: string
+        textos:
+          type: array
+          items:
+            type: string
+        fotos:
+          type: array
+          items:
+            type: object
+            properties:
+              filename:
+                type: string
+              url:
+                type: string
+        rating:
+          type: integer
+          default: 0
+        reseñas:
+          type: array
+          items:
+            type: object
+            properties:
+              usuario:
+                type: string
+              puntuacion:
+                type: integer
+              comentario:
+                type: string
+    Reseñia:
+                type: object
+                properties:
+                  puntuacion:
+                    type: integer
+                  comentario:
+                    type: string
+    Usuarios:
+      type: object
+      properties:
+        email:
+          type: string
+          uniqueItems: true
+        nombre:
+          type: string
+        contrasenia:
+          type: string
+        edad:
+          type: integer
+        ciudad:
+          type: string
+        intereses:
+          type: array
+          items:
+            type: string
+        rol:
+          type: string
+          enum:
+            - admin
+            - usuario_registrado
+            - comercio
+        permiteRecibirOfertas:
+          type: boolean
+      required:
+        - email
+    Comercios:
+      type: object
+      properties:
+        CIF:
+          type: string
+          uniqueItems: true
+        nombre:
+          type: string
+        direccion:
+          type: string
+        email:
+          type: string
+          uniqueItems: true
+        telefonos:
+          type: array
+          items:
+            type: string
+        resumen:
+          type: string
+        rol:
+          type: string
+          enum:
+            - admin
+            - comercio
+            - usuario_registrado
+      required:
+        - CIF
+        - email    
+paths:
+  /comercios:
+    get:
+      summary: Obtener todos los comercios
+      security:
+        - bearerAuth: []
+      tags:
+        - "Comercios"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comercios'
+        '4XX': 
+          description: 'ERROR_OBTENER_COMERCIOS' 
+        '401': 
+          description: 'ERROR_ID_TOKEN' 
+        '402': 
+          description: 'NOT_SESSION' 
+        '403': 
+          description: 'NOT_ALLOWED' 
+        '405': 
+          description: 'ERROR_PERMISSION' 
+    post:
+      summary: Crear un nuevo comercio
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: El comercio que se va a crear
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comercios'
+      tags:
+        - "Comercios"
+      responses:
+        '200':
+          description: Token creado:{token}
+        '4XX': 
+          description: 'ERROR_CREAR_COMERCIOS' 
+        '401': 
+          description: 'ERROR_ID_TOKEN' 
+        '402': 
+          description: 'NOT_SESSION' 
+        '403': 
+          description: 'NOT_ALLOWED' 
+        '405': 
+          description: 'ERROR_PERMISSION' 
+  /comercios/{CIF}:
+    get:
+      summary: Obtiene el comercio con el CIF dado
+      parameters:
+        - name: CIF
+          in: path
+          description: El CIF del comercio a encontrar
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      tags:
+        - "Comercios"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Comercios'
+        '4XX': 
+          description: 'ERROR_OBTENER_COMERCIOS' 
+        '401': 
+          description: 'ERROR_ID_TOKEN' 
+        '402': 
+          description: 'NOT_SESSION' 
+        '403': 
+          description: 'NOT_ALLOWED' 
+        '405': 
+          description: 'ERROR_PERMISSION' 
+    put:
+      summary: Actualizar un comercio
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: CIF
+          in: path
+          description: El CIF del comercio a encontrar
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: El comercio que se va a actualizar
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Comercios'
+      tags:
+        - "Comercios"
+      responses:
+        '200':
+          description: "Comercio con CIF:{CIF} ha sido actualizado correctamente."
+        '4XX': 
+          description: 'ERROR_ACTUALIZAR_COMERCIOS' 
+        '401': 
+          description: 'ERROR_ID_TOKEN' 
+        '402': 
+          description: 'NOT_SESSION' 
+        '403': 
+          description: 'NOT_ALLOWED' 
+        '405': 
+          description: 'ERROR_PERMISSION' 
+    delete:
+      summary: Eliminar el comercio con el CIF dado
+      parameters:
+        - name: CIF
+          in: path
+          description: El CIF del comercio a encontrar
+          required: true
+          schema:
+            type: string
+      security:
+        - bearerAuth: []
+      tags:
+        - "Comercios"
+      responses:
+        '200':
+          description: El comercio con el CIF:{CIF} ha sido eliminado correctamente y su pagina.
+        '4XX': 
+          description: 'ERROR_ELIMINAR_COMERCIOS' 
+        '401': 
+          description: 'ERROR_ID_TOKEN' 
+        '402': 
+          description: 'NOT_SESSION' 
+        '403': 
+          description: 'NOT_ALLOWED' 
+        '405': 
+          description: 'ERROR_PERMISSION' 
+  /usuarios:
+    get:
+      summary: Muestra los usuarios de la misma ciudad que el comercio y tengan activado permitirOfertas 
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: orden
+          in: query
+          description: Ordenar los usuarios por fecha de ultima sesion
+          required: false
+          schema:
+            type: integer
+      tags:
+        - "Usuarios"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usuarios'
+        '4XX': 
+          description: 'ERROR_OBTENER_USUARIOS' 
+        '401': 
+          description: 'ERROR_ID_TOKEN' 
+        '402': 
+          description: 'NOT_SESSION' 
+        '403': 
+          description: 'NOT_ALLOWED' 
+        '405': 
+          description: 'ERROR_PERMISSION' 
+    post:
+      summary: Crear un nuevo usuario
+      requestBody:
+        description: El usuario que se va a crear
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuarios'
+      tags:
+        - "Usuarios"
+      responses:
+        '200':
+          description: Token creado:{token}
+        '4XX': 
+          description: 'ERROR_CREAR_USUARIOS' 
+    put:
+      summary: Actualizar el usuario con el token dado
+      security:
+        - bearerAuth: [] 
+      requestBody:
+        description: El usuario que se va a actualizar
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuarios'
+      tags:
+        - "Usuarios"
+      responses:
+        '200':
+          description: "Usuario con el email:{email} ha sido actualizado correctamente."
+        '4XX': 
+          description: 'ERROR_ACTUALIZAR_USUARIOS' 
+        '401': 
+          description: 'ERROR_ID_TOKEN' 
+        '402': 
+          description: 'NOT_SESSION' 
+        '403': 
+          description: 'NOT_ALLOWED' 
+        '405': 
+          description: 'ERROR_PERMISSION' 
+    delete:
+      summary: Eliminar el usuario con el token dado
+      security:
+        - bearerAuth: []
+      tags:
+        - "Usuarios"
+      responses:
+        '200':
+          description: "Usuario con email:{email} ha sido eliminado correctamente"
+        '4XX': 
+          description: 'ERROR_ELIMINAR_USUARIOS' 
+        '401': 
+          description: 'ERROR_ID_TOKEN' 
+        '402': 
+          description: 'NOT_SESSION' 
+        '403': 
+          description: 'NOT_ALLOWED' 
+        '405': 
+          description: 'ERROR_PERMISSION' 
+  /paginas:
+    get:
+      summary: Muestra todas las paginas 
+      tags:
+        - "Paginas"
+      parameters:
+        - name: orden
+          in: query
+          description: Ordenar páginas por rating
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginas'
+        '4XX': 
+          description: 'ERROR_OBTENER_PAGINAS' 
+    post:
+      summary: Crear una nueva pagina
+      security:
+        - bearerAuth: [] 
+      requestBody:
+        description: La pagina que se va a crear
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Paginas'
+      tags:
+        - "Paginas"
+      responses:
+        '200':
+          description: "La pagina {titulo} ha sido creada con exito y asignada a {email}"
+        '4XX': 
+          description: 'ERROR_CREAR_PAGINAS'   
+        '401': 
+          description: 'ERROR_ID_TOKEN' 
+        '402': 
+          description: 'NOT_SESSION' 
+        '403': 
+          description: 'NOT_ALLOWED' 
+        '405': 
+          description: 'ERROR_PERMISSION' 
+    put:
+      summary: Actualizar la pagina con el token dado
+      security:
+        - bearerAuth: [] 
+      requestBody:
+        description: La pagina que se va a actualizar
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Paginas'
+      tags:
+        - "Paginas"
+      responses:
+        '200':
+          description: "Página {titulo} actualizada correctamente."
+        '4XX': 
+          description: 'ERROR_ACTUALIZAR_PAGINAS' 
+        '401': 
+          description: 'ERROR_ID_TOKEN' 
+        '402': 
+          description: 'NOT_SESSION' 
+        '403': 
+          description: 'NOT_ALLOWED' 
+        '405': 
+          description: 'ERROR_PERMISSION' 
+    delete:
+      summary: Eliminar la pagina con el token dado
+      security:
+        - bearerAuth: []
+      tags:
+        - "Paginas"
+      responses:
+        '200':
+          description: "Página {titulo} eliminada correctamente."
+        '4XX': 
+          description: 'ERROR_ELIMINAR_PAGINAS' 
+        '401': 
+          description: 'ERROR_ID_TOKEN' 
+        '402': 
+          description: 'NOT_SESSION' 
+        '403': 
+          description: 'NOT_ALLOWED' 
+        '405': 
+          description: 'ERROR_PERMISSION' 
+  /paginas/{titulo}:
+    get:
+      summary: Muestra la pagina que coincida con el titulo 
+      tags:
+        - "Paginas"
+      parameters:
+        - name: titulo
+          in: path
+          description: El titulo de la pagina a encontrar
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginas'
+        '4XX': 
+          description: 'ERROR_OBTENER_PAGINAS' 
+    patch:
+      summary: Añadir o modificar una reseña en la web del titulo con el token dado
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: titulo
+          in: path
+          description: El titulo de la pagina en la que se publica la reseña
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: La reseña a publicar
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/Reseñia'
+      tags:
+        - "Paginas"
+      responses:
+        '200':
+          description: "El usuario {email} ha publicado su reseña en {titulo} con exito"
+        '4XX': 
+          description: 'ERROR_ACTUALIZAR_PAGINAS' 
+        '401': 
+          description: 'ERROR_ID_TOKEN' 
+        '402': 
+          description: 'NOT_SESSION' 
+        '403': 
+          description: 'NOT_ALLOWED' 
+        '405': 
+          description: 'ERROR_PERMISSION'
+  /paginas/buscar/{ciudad}:
+    get:
+      summary: Muestra las paginas que esten en la ciudad 
+      tags:
+        - "Paginas"
+      parameters:
+        - name: ciudad
+          in: path
+          description: La ciudad de la que queremos las paginas
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginas'
+        '4XX': 
+          description: 'ERROR_OBTENER_PAGINAS' 
+  /paginas/buscar/{ciudad}/{actividad}:
+    get:
+      summary: Muestra las paginas que esten en la ciudad y realicen esa actividad
+      tags:
+        - "Paginas"
+      parameters:
+        - name: ciudad
+          in: path
+          description: La ciudad de la que queremos las paginas
+          required: true
+          schema:
+            type: string
+        - name: actividad
+          in: path
+          description: La actividad de la que queremos las paginas
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Paginas'
+        '4XX': 
+          description: 'ERROR_OBTENER_PAGINAS' 
+  /paginas/foto:
+    post:
+      summary: Añade una foto a la pagina del token dado
+      tags:
+        - "Paginas"
+      security:
+        - bearerAuth: [] 
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: "Página {titulo} se ha añadido la foto {filename} correctamente."
+        '4XX': 
+          description: 'ERROR_AÑADIR_FOTO'
+        '401': 
+          description: 'ERROR_ID_TOKEN' 
+        '402': 
+          description: 'NOT_SESSION' 
+        '403': 
+          description: 'NOT_ALLOWED' 
+        '405': 
+          description: 'ERROR_PERMISSION'    
+  /paginas/foto/{id}:
+    put:
+      summary: Modifica una foto en la posicion indica de la pagina del token
+      tags:
+        - "Paginas"
+      security:
+        - bearerAuth: [] 
+      parameters:
+        - name: id
+          in: path
+          description: la posicion de la imagen en la pagina
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: "Página {titulo} ha añadido la foto {filename} en la posición {id} correctamente."
+        '4XX': 
+          description: 'ERROR_ACTUALIZAR_FOTO'
+        '401': 
+          description: 'ERROR_ID_TOKEN' 
+        '402': 
+          description: 'NOT_SESSION' 
+        '403': 
+          description: 'NOT_ALLOWED' 
+        '405': 
+          description: 'ERROR_PERMISSION' 
+  /paginas/texto:
+    post:
+      summary: Añade un texto a la pagina del token dado
+      tags:
+        - "Paginas"
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: El texto que quieres añadir a la pagina
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:  
+                texto:
+                  type: string 
+      responses:
+        '200':
+          description: "Página {titulo} se ha añadido el texto {texto} correctamente."
+        '4XX': 
+          description: 'ERROR_AÑADIR_TEXTO'
+        '401': 
+          description: 'ERROR_ID_TOKEN' 
+        '402': 
+          description: 'NOT_SESSION' 
+        '403': 
+          description: 'NOT_ALLOWED' 
+        '405': 
+          description: 'ERROR_PERMISSION' 
+  /paginas/texto/{id}:
+    put:
+      summary: Añade un texto a la pagina del token dado
+      tags:
+        - "Paginas"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          description: La posicion del texto en la pagina a actualizar
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: El texto que quieres añadir a la pagina
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:  
+                texto:
+                  type: string 
+      responses:
+        '200':
+          description: "Página {titulo} ha añadido el texto {texto} en la posición {id} correctamente."
+        '4XX': 
+          description: 'ERROR_ACTUALIZAR_TEXTO'
+        '401': 
+          description: 'ERROR_ID_TOKEN' 
+        '402': 
+          description: 'NOT_SESSION' 
+        '403': 
+          description: 'NOT_ALLOWED' 
+        '405': 
+          description: 'ERROR_PERMISSION' 
+  /auth/login:
+    post:
+      summary: La autenticacion del usuario
+      tags:
+        - "Usuarios"
+      requestBody:
+        description: El email y contraseña del usuario
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:  
+                email:
+                  type: string 
+                contrasenia:
+                  type: string
+      responses:
+        '200':
+          description: "{email} iniciado con exito: {token}"
+        '4XX': 
+          description: 'ERROR_LOGIN_USER'
+        '401': 
+          description: 'INVALID_PASSWORD'
+        '404': 
+          description: 'USER_NOT_EXISTS'

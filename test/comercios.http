@@ -1,0 +1,45 @@
+GET http://localhost:3000/api/comercios HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbCI6ImFkbWluIiwiaWF0IjoxNjgzNTY1MDY0LCJleHAiOjE3MTUxMDEwNjR9.hWIu4BRKnL4NsDYiFBqZLswHjNrK47PE81Is17c93hY
+###
+
+GET http://localhost:3000/api/comercios/D82503558 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFsZXgzQGdtYWlsLmNvbSIsInJvbCI6InVzdWFyaW9fcmVnaXN0cmFkbyIsImlhdCI6MTY4MzU0NzQ3NiwiZXhwIjoxNzE1MDgzNDc2fQ.NalXoHP1CpMhXx7xR0RoEwFSbYS8WRFfOSY29WBPITA
+
+
+###
+
+POST http://localhost:3000/api/comercios HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbCI6ImFkbWluIiwiaWF0IjoxNjgzNzA4Nzk4LCJleHAiOjE3MTUyNDQ3OTh9.pbi7BGQ16ubsb6C74udbPkRlFsiDePSU1LM3q0bXhk4
+
+{
+    "CIF":"D82503558",
+    "nombre":"Comercio Pepe",
+    "direccion":"Calle merengue 22",
+    "resumen":"Somos un comercio muy molon",
+    "email":"comerciosPepe@gmail.com",
+    "telefonos":["+34632709630","651714134"]
+}
+
+###
+
+PUT http://localhost:3000/api/comercios/D82503558 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbCI6ImFkbWluIiwiaWF0IjoxNjgzNzA4Nzk4LCJleHAiOjE3MTUyNDQ3OTh9.pbi7BGQ16ubsb6C74udbPkRlFsiDePSU1LM3q0bXhk4
+
+{
+    "CIF":"V70723671",
+    "nombre":"Comercio Pepito",
+    "direccion":"Calle merengue 21",
+    "resumen":"Somos un comercio muy molon",
+    "email":"comercioPepito@gmail.com"
+}
+        
+
+###     
+
+DELETE  http://localhost:3000/api/comercios/D82503558 HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbCI6ImFkbWluIiwiaWF0IjoxNjgzNzA4Nzk4LCJleHAiOjE3MTUyNDQ3OTh9.pbi7BGQ16ubsb6C74udbPkRlFsiDePSU1LM3q0bXhk4
+
+###
+

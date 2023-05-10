@@ -15,7 +15,7 @@ info:
     name: U-tad
     url: https://u-tad.com/
 servers:
-    - url: https://apicomercio-production.up.railway.app/api
+    - url: https://apicomercio-production.up.railway.app/api/
     - url: http://localhost:3000/api/
 tags:
   - name: Usuarios

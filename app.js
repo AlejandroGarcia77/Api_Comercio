@@ -38,7 +38,8 @@ const port = process.env.PORT || 3000
 
 app.listen(port, () => {
     console.log("🚀 Servidor escuchando en el puerto " + port)
-    console.log("📕 Documentacion en la url:" + process.env.PUBLIC_URL+"/api/docs")
+    console.log("🌐📕 Documentacion en la url:" + process.env.PUBLIC_URL+"/api/docs")
+    console.log("📕 Documentacion en la url:" + process.env.LOCAL_URL+"/api/docs")
 })
 
 module.exports = app
